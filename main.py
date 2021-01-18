@@ -16,7 +16,13 @@ def write_json(data, filename='count.json'):
       
  
 def log():
-  server = MinecraftServer("fastgens.minehut.gg",25565)
+  with open('serverip.json') as json_file: 
+      data = json.load(json_file) 
+      data = data['server'] 
+      ip = (data[0]['ip'])
+      port = int(data[0]['port'])
+
+  server = MinecraftServer(ip,port)
   status = server.status()
   playercount = status.players.online
   print("The server has {0} players and replied in {1} ms".format(status.players.online, status.latency))
