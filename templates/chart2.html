@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Fastgens Playercount</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+	<script src="https://www.chartjs.org/dist/2.9.4/Chart.min.js"></script>
+	<script src="https://www.chartjs.org/samples/latest/utils.js"></script>
+  <script src="https://albinodrought.github.io/chartjs-plugin-downsample/chartjs-plugin-downsample.js"></script>
+	<style>
+		canvas {
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+	</style>
+</head>
+
+<body>
+	<div style="width:75%;">
+		<canvas id="canvas"></canvas>
+	</div>
+<!--
+  <br>
+
+        <div>
+            <label for="threshold">Threshold: </label>
+            <input type="range" id="threshold" min="1" max="0" value="0" step="1" style="width: 100%" />
+            <span id="thresholdCurrent">0</span>
+        </div>
+-->
+	<br>
+	<br>
+	 <!-- <button id="addData">Add Data</button>  -->
+	<script>
+    console.log("start");
+    /*
+		function newDate(days) {
+			return moment().add(days, 'd').toDate();
+		}
+
+		function newDateString(days) {
+			return moment().add(days, 'd').format();
+		} */
+
+		var color = Chart.helpers.color;
+		var config = {
+			type: 'line',
+			data: {
+				datasets: [{
+					label: 'Players',
+					backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+					borderColor: window.chartColors.blue,
+					fill: false,
+					data: [ /*{
+						x: newDateString(0),
+						y: randomScalingFactor()
+					}, {
+						x: newDateString(2),
+						y: randomScalingFactor()
+					}, {
+						x: newDateString(4),
+						y: randomScalingFactor()
+					}, {
+						x: newDateString(5),
+						y: randomScalingFactor()
+					} */ ],
+				} /* , {
+					label: 'Dataset with date object point data',
+					backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+					borderColor: window.chartColors.red,
+					fill: false,
+					data: [{
+						x: newDate(0),
+						y: randomScalingFactor()
+					}, {
+						x: newDate(2),
+						y: randomScalingFactor()
+					}, {
+						x: newDate(4),
+						y: randomScalingFactor()
+					}, {
+						x: newDate(5),
+						y: randomScalingFactor()
+					}]
+				} */  ]
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Fastgens Playercount'
+				},
+				scales: {
+					xAxes: [{
+						type: 'time',
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'Date'
+						},
+						ticks: {
+							major: {
+								fontStyle: 'bold',
+								fontColor: '#FF0000'
+							}
+						}
+					}],
+					yAxes: [{
+						display: true,
+						scaleLabel: {
+							display: true,
+							labelString: 'value'
+						}
+					}]
+				}/*,
+        downsample: {
+          enabled: true,
+          threshold: 100,
+        }*/,
+        elements: {
+            line: {
+                tension: 0 // disables bezier curves
+            }
+        }
+			}
+		};
+
+		window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myLine = new Chart(ctx, config);
+
+/*
+      var slider = document.getElementById("threshold"),
+        thresholdCurrent = document.getElementById("thresholdCurrent");
+
+      var cdata = {{ cdata | tojson }};
+      slider.max =  cdata.length;
+      slider.value = thresholdCurrent.innerHTML = config.options.downsample.threshold;
+
+      slider.oninput = function() {
+          window.myLine.options.downsample.threshold = thresholdCurrent.innerHTML = slider.value;
+          window.myLine.update();
+      };
+*/
+		};
+
+    /* 
+		document.getElementById('addData').addEventListener('click', function() {
+			if (config.data.datasets.length > 0) {
+				config.data.datasets[0].data.push({
+					x: newDateString(config.data.datasets[0].data.length + 2),
+					y: randomScalingFactor()
+				});
+				//config.data.datasets[1].data.push({
+				//	x: newDate(config.data.datasets[1].data.length + 2),
+				//	y: randomScalingFactor()
+				//}); 
+
+				window.myLine.update();
+			}
+		}); 
+
+    */
+
+    function addTen(){
+      var cdata = {{ cdata | tojson }};
+      for (i = 0; i < cdata.length; i++) {
+          config.data.datasets[0].data.push({
+            //x: newDateString(config.data.datasets[0].data.length + 2),
+            //y: randomScalingFactor()
+            x: cdata[i][0],
+            y: cdata[i][1]
+          });
+
+          window.myLine.update();
+          console.log("data points added");
+      }
+    }
+
+  
+
+document.addEventListener('readystatechange', () => {    
+  if (document.readyState == 'complete'){ setTimeout(addTen, 100); }
+});
+
+
+
+	</script>
+</body>
+
+</html>

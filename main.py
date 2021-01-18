@@ -27,9 +27,10 @@ def log():
   playercount = status.players.online
   print("The server has {0} players and replied in {1} ms".format(status.players.online, status.latency))
 
-  now = datetime.datetime.now()
+  #now = datetime.datetime.now()
   #print(now.strftime('%H:%M:%S on %A, %B the %dth, %Y')) this is in gmt
-  hms = now.strftime('%H:%M:%S')
+  #hms = now.strftime('%H:%M:%S')
+  hms = datetime.datetime.now().isoformat()
   print(hms+" : "+str(playercount))
 
 
@@ -51,6 +52,7 @@ def log():
 
 @app.route("/")
 def chart():
+  '''
     f = open('count.json') 
     data = json.load(f) 
     f.close()
@@ -71,7 +73,21 @@ def chart():
 
 
 
-    return render_template('chart.html', values=values, labels=labels, legend=legend )
+    return render_template('chart.html', values=values, labels=labels, legend=legend ) '''
+  f = open('count.json') 
+  data = json.load(f) 
+  f.close()
+  labels = []
+  values = []
+
+  for i in data['playercount']: 
+      #print(i) 
+    labels.append(i["time"])
+    values.append(i["players"])
+
+  z = list(zip(labels,values))
+
+  return render_template('chart2.html', cdata = z)
  
  
  
