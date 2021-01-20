@@ -169,12 +169,20 @@
     function addTen(){
       var cdata = {{ cdata | tojson }};
       for (i = 0; i < cdata.length; i++) {
+        if(cdata[i][1] != 0 ){
           config.data.datasets[0].data.push({
             //x: newDateString(config.data.datasets[0].data.length + 2),
             //y: randomScalingFactor()
             x: cdata[i][0],
             y: cdata[i][1]
           });
+        }
+        else if(cdata[i-1][1] == 0 & cdata[i][1] == 0){
+          config.data.datasets[0].data.push({
+            x: cdata[i][0],
+            y: cdata[i][1]
+          });
+        }
 
           //window.myLine.update();
           console.log("data points added");
