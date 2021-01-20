@@ -4,7 +4,9 @@ from flask import render_template
 import datetime
 import json
 from mcstatus import MinecraftServer
-from flask_apscheduler import APScheduler
+#from flask_apscheduler import APScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
+import atexit
 
 
  
@@ -142,12 +144,16 @@ def weekly_clear(text):
     print()
 
 if __name__ == "__main__":
-    scheduler = APScheduler()
+    #scheduler = APScheduler()
+    scheduler = BackgroundScheduler()
     scheduler.add_job(func=minute_log, args=['job run minute log '], trigger='interval', id='minutelog', minutes=1)
     scheduler.add_job(func=weekly_clear, args=['job run hour check '], trigger='interval', id='weeklyclear', hours=1)
     #24 (hours) * 7 (days per week) = 168 (one week)
 
     scheduler.start()
+
+    atexit.register(lambda: scheduler.shutdown())
+
 
     print("Server Start at",str(datetime.datetime.now()))
     app.run(host='0.0.0.0', port=8080)
