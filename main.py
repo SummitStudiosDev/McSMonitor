@@ -77,10 +77,12 @@ def chart():
 
     return render_template('chart.html', values=values, labels=labels, legend=legend ) '''
   f = open('count.json') 
-  data = json.load(f) 
+  data = json.load(f)
   f.close()
+
   labels = []
   values = []
+
 
   for i in data['playercount']: 
       #print(i) 
