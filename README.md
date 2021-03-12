@@ -16,9 +16,11 @@ To setup the server that the program tracks, simply go to serverip.json and chan
 If you wish to change the port that the monitor runs on, change
 ```python
 app.run(host='0.0.0.0', port=8080)
-``` to whichever port you want.
+``` 
 
+to whichever port you want.
 Once you are done setting up, simply run
+
 ```
 python main.py
 ```
